@@ -1,0 +1,41 @@
+{
+  "name": "query-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node src",
+    "flow": "flow",
+    "flow:watch": "flow-watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CheaprEats/query-engine.git"
+  },
+  "author": "CheaprEats Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CheaprEats/query-engine/issues"
+  },
+  "homepage": "https://github.com/CheaprEats/query-engine#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-flow": "^7.0.0",
+    "flow-bin": "^0.91.0",
+    "flow-watch": "^1.1.4",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.12",
+    "uuid": "^3.3.2"
+  }
+}

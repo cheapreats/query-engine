@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Query Engine Editor</title>
+        <style>
+            body {
+                background-color: #1d1d1d;
+            }
+            #editor {
+                width: 50%;
+                height: calc(100% - 50px);
+                position: absolute;
+                top: 50px;
+                left: 0;
+            }
+            #response {
+                width: 50%;
+                height: calc(100% - 50px);
+                position: absolute;
+                top: 50px;
+                left: 50%;
+                color: white;
+            }
+            #controls {
+                background-color: #111111;
+                position: absolute;
+                top: 0;
+                height: 50px;
+                width: 100%;
+                left: 0;
+                text-align: center;
+            }
+            #controls button {
+                height: 50px;
+                background-color: black;
+                color: white;
+                border: none;
+                text-align: center;
+                padding-left: 20px;
+                padding-right: 20px;
+                font-size: 14px;
+                text-transform: capitalize;
+                outline: none;
+            }
+
+            #controls button:hover {
+                background-color: rgba(255,255,255,0.2);
+            }
+
+            .section-header {
+                background-color: #262626;
+                color: rgba(255, 255, 255, 0.2);
+                font-family: sans-serif;
+                padding: 5px 0 5px 10px;
+                font-weight: 100;
+            }
+
+            pre {
+                padding: 20px;
+                color: #c2c2c2;
+            }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ace.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+        <script
+                src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div id="controls">
+            <button onclick="sendRequest();" id="run-button"><i class="fa fa-play" aria-hidden="true"></i></button>
+        </div>
+
+        <div id="editor">async () => {
+    let db = await connection.getDatabase('cheapreats');
+    let collection = await db.getCollection('customers');
+    let docs = await collection.find({});
+    console.log(docs.map(doc => doc.email_address).join('\n'));
+}</div>
+        <div id="response">
+            <div class="section-header">STANDARD OUT</div>
+            <pre><code id="stdout"></code></pre>
+            <div class="section-header">STANDARD ERR</div>
+            <pre><code id="stderr"></code></pre>
+        </div>
+    <script>
+        let editor = ace.edit("editor");
+        editor.setTheme("ace/theme/twilight");
+        editor.session.setMode("ace/mode/javascript");
+        editor.setOptions({
+            fontSize: "10pt",
+            lineHeight: "15px"
+        });
+        function sendRequest() {
+            $("#run-button").html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>');
+            axios.post("/api/run", editor.getValue(), {
+                headers: { 'Content-Type': 'text/plain' }
+            })
+                .then(data => {
+                    $("#stdout").html(data.data.stdout);
+                    $("#stderr").html(data.data.stderr);
+                })
+                .catch(e => {
+
+                })
+                .finally(() => {
+                    $("#run-button").html('<i class="fa fa-play" aria-hidden="true"></i>');
+                })
+        }
+    </script>
+    </body>
+</html>
